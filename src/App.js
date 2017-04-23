@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {
   isoPoint,
-  isoCell
 } from './pathGen';
+import Cell from './Cell';
 
 class App extends Component {
   render() {
@@ -26,9 +26,6 @@ class App extends Component {
       }
     }
 
-    // points[5][5] = isoPoint(5, 5, 0);
-
-
     const cells = [];
     for (let x = 0; x < 5; x++) {
       for (let y = 0; y < 5; y++) {
@@ -40,12 +37,11 @@ class App extends Component {
       <svg height="500" width="800">
         <g transform="translate(400, 50)">
           {cells.map(cell => (
-            <path
+            <Cell
               key={[cell.x,cell.y].join('.')}
-              d={isoCell(points, cell.x, cell.y)}
-              fill="#008000"
-              stroke="black"
-              fillOpacity={0.8}
+              points={points}
+              mapX={cell.x}
+              mapY={cell.y}
             />
           ))}
         </g>

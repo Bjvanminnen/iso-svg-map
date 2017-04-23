@@ -13,25 +13,3 @@ export const isoPoint = (mapX, mapY, height) => {
     (mapX + mapY) * TILE_HEIGHT_HALF - 20 * height,
   ]);
 }
-
-export const isoCell = (points, mapX, mapY) => {
-  const top = points[mapX][mapY];
-  const right = points[mapX + 1][mapY];
-  const bottom = points[mapX + 1][mapY + 1];
-  const left = points[mapX][mapY + 1];
-
-  return pathFrom(
-    moveTo(...top),
-    lineTo(...right),
-    lineTo(...bottom),
-    lineTo(...left),
-    closePath()
-  );
-  // pathFrom(
-  //   moveTo(...isoPoint(mapX, mapY)),
-  //   lineTo(...isoPoint(mapX + 1, mapY)),
-  //   lineTo(...isoPoint(mapX + 1, mapY + 1)),
-  //   lineTo(...isoPoint(mapX, mapY + 1)),
-  //   closePath()
-  // )
-}
