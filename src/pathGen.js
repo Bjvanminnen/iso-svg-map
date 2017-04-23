@@ -11,5 +11,6 @@ export const isoPoint = (mapX, mapY, height) => {
   return ([
     (mapX - mapY) * TILE_WIDTH_HALF,
     (mapX + mapY) * TILE_HEIGHT_HALF - 20 * height,
+    height
   ]);
 }
