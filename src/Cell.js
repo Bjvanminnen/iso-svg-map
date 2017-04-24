@@ -1,11 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  pathFrom,
-  moveTo,
-  lineTo,
-  closePath,
-} from './pathGen';
 
 const colors = {
   flat: '#00a000',
@@ -17,11 +11,6 @@ const colors = {
 const pointString = (points) => (
   points.map(p => [p[0], p[1]].join(',')).join(' ')
 );
-
-const pointString2 = (points) => {
-  console.log(points);
-  return pointString(points);
-};
 
 const normalizeHeights = (heights) => {
   const min = Math.min(...heights);
@@ -63,13 +52,20 @@ const polygons = {
 
 export default class Cell extends Component {
   static propTypes = {
-    points: PropTypes.array.isRequired,
-    mapX: PropTypes.number.isRequired,
-    mapY: PropTypes.number.isRequired,
+    // TODO
+    grid: PropTypes.object.isRequired,
+    mapCoordinates: PropTypes.shape({
+      x: PropTypes.number.isRequired,
+      y: PropTypes.number.isRequired
+    }).isRequired
   };
 
   render() {
-    const { points, mapX, mapY } = this.props;
+    const { grid, mapCoordinates } = this.props;
+
+    const mapX = mapCoordinates.x;
+    const mapY = mapCoordinates.y;
+    const points = grid.points;
 
     const corners = [
       points[mapX][mapY],
@@ -86,7 +82,7 @@ export default class Cell extends Component {
         {polies.map((poly, key) => (
           <polygon
             key={key}
-            points={pointString2(poly.points.map(index => corners[index]))}
+            points={pointString(poly.points.map(index => corners[index]))}
             style={{
               stroke: poly.color,
               fill: poly.color
