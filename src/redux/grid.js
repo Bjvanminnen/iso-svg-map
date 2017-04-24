@@ -13,7 +13,7 @@ const initialState = {
 export default function(state = initialState, action) {
   const reducer = reducers[action.type];
   if (!reducer) {
-    return action;
+    return state;
   }
   return reducer(state, action);
 }
@@ -39,8 +39,6 @@ reducers[CREATE_GRID] = (state, action) => {
     }
   }
 
-  heights = heights.set(pointKey(3, 3), 1);  
-
   return {
     ...state,
     rows,
@@ -51,15 +49,44 @@ reducers[CREATE_GRID] = (state, action) => {
 }
 
 // RAISE_POINT
-// const RAISE_POINT = 'grid/RAISE_POINT';
-// export const raisePoint = (x, y) => ({
-//   type: RAISE_POINT,
-//   x,
-//   y
-// });
-// reducers[RAISE_POINT] = (state, x, y) => {
-//
-// };
+const RAISE_POINT = 'grid/RAISE_POINT';
+export const raisePoint = (x, y) => ({
+  type: RAISE_POINT,
+  x,
+  y
+});
+const raisePointsRecursively = (heights, x, y) => {
+  const updatedHeight = heights.get(pointKey(x, y)) + 1;
+  heights = heights.set(pointKey(x, y), updatedHeight);
+  [
+    [x - 1, y],
+    [x, y - 1],
+    [x + 1, y],
+    [x, y + 1],
+    [x + 1, y + 1],
+    [x - 1, y - 1],
+    [x + 1, y - 1],
+    [x - 1, y + 1],
+  ].forEach(([otherX, otherY]) => {
+    if (heights.get(pointKey(x, y)) === undefined) {
+      return;
+    }
+    const thisHeight = heights.get(pointKey(otherX, otherY));
+    if (updatedHeight - thisHeight > 1) {
+      heights = raisePointsRecursively(heights, otherX, otherY);
+    }
+  });
+
+  return heights;
+};
+
+reducers[RAISE_POINT] = (state, action) => {
+  const { x, y } = action;
+  return {
+    ...state,
+    heights: raisePointsRecursively(state.heights, x, y)
+  };
+};
 
 // Helpers
 const TILE_HEIGHT_HALF = 32;
