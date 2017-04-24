@@ -8,8 +8,57 @@ import {
 } from './pathGen';
 
 const colors = {
-  flat: '#008000',
-  angle: '#228000'
+  flat: '#00a000',
+  angle: '#008000',
+  angleRight: '#008000',
+  angleLeft: '#008000',
+};
+
+const pointString = (points) => (
+  points.map(p => [p[0], p[1]].join(',')).join(' ')
+);
+
+const pointString2 = (points) => {
+  console.log(points);
+  return pointString(points);
+};
+
+const normalizeHeights = (heights) => {
+  const min = Math.min(...heights);
+  return heights.map(x => x === min ? '0' : '1').join('');
+};
+
+const allPoints = [0,1,2,3];
+const topPoints = [0,1,3];
+const bottomPoints = [1,2,3];
+const rightPoints = [0,1,2];
+const leftPoints = [0,2,3];
+
+const genPoly = (points, colors) => {
+  if (points.length !== colors.length) {
+    throw new Error('Different number of points and colors');
+  }
+
+  return points.map((p, index) => ({
+    points: p,
+    color: colors[index]
+  }));
+};
+
+
+const polygons = {
+  '0000': genPoly([allPoints], [colors.flat]),
+  '0001': genPoly([leftPoints, rightPoints], [colors.angle, colors.flat]),
+  '0010': genPoly([topPoints, bottomPoints], [colors.flat, colors.angle]),
+  '0100': genPoly([leftPoints, rightPoints], [colors.flat, colors.angle]),
+  '0110': genPoly([allPoints], [colors.angle]),
+  '0111': genPoly([topPoints, bottomPoints], [colors.angle, colors.flat]),
+  '1000': genPoly([topPoints, bottomPoints], [colors.angle, colors.flat]),
+  '1001': genPoly([allPoints], [colors.angleRight]),
+  '1011': genPoly([leftPoints, rightPoints], [colors.flat, colors.angle]),
+  '1100': genPoly([allPoints], [colors.angleLeft]),
+  '1101': genPoly([topPoints, bottomPoints], [colors.flat, colors.angle]),
+  '1110': genPoly([leftPoints, rightPoints], [colors.angle, colors.flat])
 };
 
 export default class Cell extends Component {
@@ -22,42 +71,36 @@ export default class Cell extends Component {
   render() {
     const { points, mapX, mapY } = this.props;
 
-    const top = points[mapX][mapY];
-    const right = points[mapX + 1][mapY];
-    const bottom = points[mapX + 1][mapY + 1];
-    const left = points[mapX][mapY + 1];
+    const corners = [
+      points[mapX][mapY],
+      points[mapX + 1][mapY],
+      points[mapX + 1][mapY + 1],
+      points[mapX][mapY + 1]
+    ];
+    const key = normalizeHeights(corners.map(x => x[2]));
 
-    const mainPath = pathFrom(
-      moveTo(...top),
-      lineTo(...right),
-      lineTo(...bottom),
-      lineTo(...left),
-      closePath()
-    );
-
-    let anglePath;
-    if (top[2] !== bottom[2] && left[2] === right[2]) {
-      anglePath = pathFrom(
-        moveTo(...(top[2] === left[2] ? bottom : top)),
-        lineTo(...right),
-        lineTo(...left),
-        closePath()
-      );
-    }
+    let polies = polygons[key] || [];
 
     return (
       <g>
-        <path
-          d={mainPath}
-          fill={colors.flat}
-          stroke="black"
-          fillOpacity={0.8}
+        {polies.map((poly, key) => (
+          <polygon
+            key={key}
+            points={pointString2(poly.points.map(index => corners[index]))}
+            style={{
+              stroke: poly.color,
+              fill: poly.color
+            }}
+          />
+        ))}
+        <polygon
+          key={-1}
+          points={pointString(corners)}
+          style={{
+            stroke: 'black',
+            fill: 'none'
+          }}
         />
-        {anglePath && <path
-          d={anglePath}
-          fill={colors.angle}
-        />
-        }
       </g>
     );
   }
