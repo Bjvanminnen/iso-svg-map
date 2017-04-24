@@ -1,4 +1,6 @@
-import { isoPoint } from './pathGen';
+const TILE_HEIGHT_HALF = 32;
+const TILE_WIDTH_HALF = TILE_HEIGHT_HALF * 2;
+const HEIGHT_DELTA = 20;
 
 let grid;
 
@@ -13,61 +15,76 @@ export default class Grid {
   constructor(rows, cols) {
     this.rows = rows;
     this.cols = cols;
-    this.points = [];
+    this.heights = [];
     this.cells = [];
 
     this.init_();
   }
 
   init_() {
-    const heights = {
-      '1_2': 1,
-      '1_3': 1,
-      '1_4': 1,
-      '2_1': 1,
-      '2_2': 1,
-      '2_3': 2,
-      '2_4': 1,
-      '3_2': 1,
-      '3_3': 1,
-      '3_4': 1,
-    };
-
-    // 2d array containing screen coordinates of points
-    const points = this.points;
     for (let x = 0; x < this.cols + 1; x++) {
-      points[x] = [];
+      this.heights[x] = [];
       for (let y = 0; y < this.rows + 1; y++) {
-        points[x][y] = isoPoint(x, y, heights[`${x}_${y}`] || 0);
+        this.heights[x][y] = 0;
+        if (x < this.cols && y < this.rows) {
+          this.cells.push({x, y});
+        }
       }
     }
 
-    // all passable sets of map points
-    const cells = this.cells;
-    for (let x = 0; x < this.cols; x++) {
-      for (let y = 0; y < this.rows; y++) {
-        cells.push({x, y});
-      }
-    }
+    this.raisePoint(3, 3);
+    this.raisePoint(3, 3);
+    this.raisePoint(4, 5);
+  }
+
+  pointScreenPos_(x, y) {
+    const height = this.heights[x][y];
+    return {
+      x: (x - y) * TILE_WIDTH_HALF,
+      y: (x + y) * TILE_HEIGHT_HALF - HEIGHT_DELTA * height,
+    };
+  }
+
+  isPoint(x, y) {
+    return x >= 0 && x < this.cols && y >= 0 && y < this.rows;
   }
 
   getCorners(x, y) {
     return [
-      this.points[x][y],
-      this.points[x + 1][y],
-      this.points[x + 1][y + 1],
-      this.points[x][y + 1]
+      this.pointScreenPos_(x, y),
+      this.pointScreenPos_(x + 1, y),
+      this.pointScreenPos_(x + 1, y + 1),
+      this.pointScreenPos_(x, y + 1)
     ];
   }
 
-  // dropPoint(x, y) {
-  //   return this.changePoint_(x, y, -1);
-  // }
-  //
-  // raisePoint(x, y) {
-  //   return this.changePoint_(x, y, 1);
-  // }
-  //
-  // changePoint_(x, y, delta) {
-  // }
+  getCornerHeights(x, y) {
+    return [
+      this.heights[x][y],
+      this.heights[x + 1][y],
+      this.heights[x + 1][y + 1],
+      this.heights[x][y + 1],
+    ];
+  }
+
+  raisePoint(x, y) {
+    this.heights[x][y] += 1;
+    [
+      [x - 1, y],
+      [x, y - 1],
+      [x + 1, y],
+      [x, y + 1],
+      [x + 1, y + 1],
+      [x - 1, y - 1],
+      [x + 1, y - 1],
+      [x - 1, y + 1],
+    ].forEach(([otherX, otherY]) => {
+      if (!this.isPoint(otherX, otherY)) {
+        return;
+      }
+      if (this.heights[x][y] - this.heights[otherX][otherY] > 1) {
+        this.raisePoint(otherX, otherY);
+      }
+    });
+  }
 }

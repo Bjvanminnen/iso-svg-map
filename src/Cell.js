@@ -13,8 +13,7 @@ const pointString = (points) => (
   points.map(p => [p.x, p.y].join(',')).join(' ')
 );
 
-const heightsKey = (corners) => {
-  const heights = corners.map(item => item.height);
+const heightsKey = (heights) => {
   const min = Math.min(...heights);
   return heights.map(x => x === min ? '0' : '1').join('');
 };
@@ -40,6 +39,7 @@ const polygons = {
   '0000': genPoly([allPoints], [colors.flat]),
   '0001': genPoly([leftPoints, rightPoints], [colors.angle, colors.flat]),
   '0010': genPoly([topPoints, bottomPoints], [colors.flat, colors.angle]),
+  '0011': genPoly([allPoints], [colors.angleRight]),
   '0100': genPoly([leftPoints, rightPoints], [colors.flat, colors.angle]),
   '0110': genPoly([allPoints], [colors.angle]),
   '0111': genPoly([topPoints, bottomPoints], [colors.angle, colors.flat]),
@@ -62,7 +62,7 @@ export default class Cell extends Component {
     const { grid, x, y } = this.props;
 
     const corners = grid.getCorners(x, y);
-    const key = heightsKey(corners);
+    const key = heightsKey(grid.getCornerHeights(x,y));
 
     let polies = polygons[key] || [];
 
