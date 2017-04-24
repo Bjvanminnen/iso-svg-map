@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Cell from './Cell';
-import { getGrid } from './grid';
+import Grid from './grid';
 
 class App extends Component {
   render() {
-    const grid = getGrid();
+    const grid = Grid.getGrid();
 
     return (
       <svg height="500" width="800">
@@ -13,7 +13,8 @@ class App extends Component {
             <Cell
               key={index}
               grid={grid}
-              mapCoordinates={cell}
+              x={cell.x}
+              y={cell.y}
             />
           ))}
         </g>

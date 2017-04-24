@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Grid from './grid';
 
 const colors = {
   flat: '#00a000',
@@ -9,10 +10,11 @@ const colors = {
 };
 
 const pointString = (points) => (
-  points.map(p => [p[0], p[1]].join(',')).join(' ')
+  points.map(p => [p.x, p.y].join(',')).join(' ')
 );
 
-const normalizeHeights = (heights) => {
+const heightsKey = (corners) => {
+  const heights = corners.map(item => item.height);
   const min = Math.min(...heights);
   return heights.map(x => x === min ? '0' : '1').join('');
 };
@@ -34,7 +36,6 @@ const genPoly = (points, colors) => {
   }));
 };
 
-
 const polygons = {
   '0000': genPoly([allPoints], [colors.flat]),
   '0001': genPoly([leftPoints, rightPoints], [colors.angle, colors.flat]),
@@ -52,28 +53,16 @@ const polygons = {
 
 export default class Cell extends Component {
   static propTypes = {
-    // TODO
-    grid: PropTypes.object.isRequired,
-    mapCoordinates: PropTypes.shape({
-      x: PropTypes.number.isRequired,
-      y: PropTypes.number.isRequired
-    }).isRequired
+    grid: PropTypes.instanceOf(Grid).isRequired,
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired
   };
 
   render() {
-    const { grid, mapCoordinates } = this.props;
+    const { grid, x, y } = this.props;
 
-    const mapX = mapCoordinates.x;
-    const mapY = mapCoordinates.y;
-    const points = grid.points;
-
-    const corners = [
-      points[mapX][mapY],
-      points[mapX + 1][mapY],
-      points[mapX + 1][mapY + 1],
-      points[mapX][mapY + 1]
-    ];
-    const key = normalizeHeights(corners.map(x => x[2]));
+    const corners = grid.getCorners(x, y);
+    const key = heightsKey(corners);
 
     let polies = polygons[key] || [];
 
