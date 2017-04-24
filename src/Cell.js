@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Grid from './grid';
+import { connect } from 'react-redux';
+import { getCorners, getCornerHeights } from './redux/grid';
 
 const colors = {
   flat: '#00a000',
@@ -51,18 +52,18 @@ const polygons = {
   '1110': genPoly([leftPoints, rightPoints], [colors.angle, colors.flat])
 };
 
-export default class Cell extends Component {
+class Cell extends Component {
   static propTypes = {
-    grid: PropTypes.instanceOf(Grid).isRequired,
+    corners: PropTypes.array.isRequired,
+    cornerHeights: PropTypes.array.isRequired,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired
   };
 
   render() {
-    const { grid, x, y } = this.props;
+    const { corners, cornerHeights } = this.props;
 
-    const corners = grid.getCorners(x, y);
-    const key = heightsKey(grid.getCornerHeights(x,y));
+    const key = heightsKey(cornerHeights);
 
     let polies = polygons[key] || [];
 
@@ -90,3 +91,8 @@ export default class Cell extends Component {
     );
   }
 }
+
+export default connect((state, otherProps) => ({
+  corners: getCorners(state.grid, otherProps.x, otherProps.y),
+  cornerHeights: getCornerHeights(state.grid, otherProps.x, otherProps.y),
+}))(Cell);
