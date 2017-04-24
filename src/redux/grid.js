@@ -1,4 +1,23 @@
-// Actions
+let reducers = {};
+
+const initialState = {
+  rows: 0,
+  cols: 0,
+  // TODO - immutable JS?
+  heights: [],
+  cells: []
+};
+
+// Primary reducer
+export default function(state = initialState, action) {
+  const reducer = reducers[action.type];
+  if (!reducer) {
+    return action;
+  }
+  return reducer(state, action);
+}
+
+// CREATE_GRID
 const CREATE_GRID = 'grid/CREATE_GRID';
 export const createGrid = (rows, cols) => ({
   type: CREATE_GRID,
@@ -6,39 +25,41 @@ export const createGrid = (rows, cols) => ({
   cols
 });
 
-const initialState = {
-  rows: 0,
-  cols: 0,
-  heights: [],
-  cells: []
-};
-
-// Reducer
-export default function(state = initialState, action) {
-  if (action.type === CREATE_GRID) {
-    const { rows, cols } = action;
-    let heights = [];
-    let cells = [];
-    for (let x = 0; x < cols + 1; x++) {
-      heights[x] = [];
-      for (let y = 0; y < rows + 1; y++) {
-        heights[x][y] = 0;
-        if (x < cols && y < rows) {
-          cells.push({x, y});
-        }
+reducers[CREATE_GRID] = (state, action) => {
+  const { rows, cols } = action;
+  let heights = [];
+  let cells = [];
+  for (let x = 0; x < cols + 1; x++) {
+    heights[x] = [];
+    for (let y = 0; y < rows + 1; y++) {
+      heights[x][y] = 0;
+      if (x < cols && y < rows) {
+        cells.push({x, y});
       }
     }
-
-    return {
-      ...state,
-      rows,
-      cols,
-      heights,
-      cells
-    };
   }
-  return action;
+
+  heights[3][3] = 1;
+
+  return {
+    ...state,
+    rows,
+    cols,
+    heights,
+    cells
+  };
 }
+
+// RAISE_POINT
+// const RAISE_POINT = 'grid/RAISE_POINT';
+// export const raisePoint = (x, y) => ({
+//   type: RAISE_POINT,
+//   x,
+//   y
+// });
+// reducers[RAISE_POINT] = (state, x, y) => {
+//
+// };
 
 // Helpers
 const TILE_HEIGHT_HALF = 32;
@@ -60,7 +81,9 @@ export const getCorners = (state, x, y) => ([
   pointScreenPos(state, x, y + 1)
 ]);
 
-// TODO
 export const getCornerHeights = (state, x, y) => ([
-  1,1,1,1
+  state.heights[x][y],
+  state.heights[x + 1][y],
+  state.heights[x + 1][y + 1],
+  state.heights[x][y + 1],
 ]);
