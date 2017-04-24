@@ -1,17 +1,15 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { createLogger } from 'redux-logger';
 
-let store;
+import grid from './grid';
 
-function foo(state = {}, action) {
-  return state;
-}
+let store;
 
 export default function getStore() {
   if (!store) {
     store = createStore(
       combineReducers({
-        foo
+        grid
       }),
       applyMiddleware(createLogger({
         collapsed: true
