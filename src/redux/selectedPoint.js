@@ -1,4 +1,4 @@
-import createReducer from './createReducer';
+import { createReducer } from './utils';
 
 let reducers = {};
 
@@ -10,4 +10,4 @@ const CLEAR_POINT = 'selectedPoint/CLEAR_POINT';
 export const clearPoint = () => ({ type: CLEAR_POINT });
 reducers[CLEAR_POINT] = () => null;
 
-export default createReducer(null, reducers);
+export default createReducer(null, reducers, 'selectedPoint');

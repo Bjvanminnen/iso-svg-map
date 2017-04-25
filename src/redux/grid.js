@@ -1,5 +1,5 @@
 import Immutable from 'immutable';
-import createReducer from './createReducer';
+import { createReducer } from './utils';
 
 let reducers = {};
 const initialState = {
@@ -9,8 +9,16 @@ const initialState = {
   cells: []
 };
 
+function hydrator(state) {
+  // state => ({
+  return ({
+    ...state.grid,
+    heights: Immutable.fromJS(state.grid.heights)
+  });
+}
+
 // Primary reducer
-export default createReducer(initialState, reducers);
+export default createReducer(initialState, reducers, hydrator);
 
 // CREATE_GRID
 const CREATE_GRID = 'grid/CREATE_GRID';

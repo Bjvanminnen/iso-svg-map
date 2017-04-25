@@ -22,12 +22,12 @@ export default function getStore() {
           for (var i of Object.keys(state)) {
             if (Immutable.Iterable.isIterable(state[i])) {
               newState[i] = state[i].toJS();
-            } else if (i === 'grid') {
-              // TODO could make this more generic
-              newState[i] = {
-                ...state[i],
-                heights: state[i].heights.toJS(),
-              };
+            // } else if (i === 'grid') {
+            //   // TODO could make this more generic
+            //   newState[i] = {
+            //     ...state[i],
+            //     heights: state[i].heights.toJS(),
+            //   };
             } else {
               newState[i] = state[i];
             }

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import getStore from './redux/getStore';
 import { raisePoint } from './redux/grid';
+import { hydrate } from './redux/utils';
 
 const styles = {
   main: {
@@ -14,24 +16,50 @@ class Toolbox extends Component {
   constructor(props) {
     super(props);
 
-    this.onClick = this.onClick.bind(this);
+    this.onRaise = this.onRaise.bind(this);
+    this.onSave = this.onSave.bind(this);
+    this.onRestore = this.onRestore.bind(this);
   }
 
-  onClick() {
+  onRaise() {
     const { selectedPoint, raisePoint } = this.props;
     raisePoint(selectedPoint.x, selectedPoint.y);
   }
 
+  onSave() {
+    const store = getStore();
+    localStorage.setItem('savedStore', JSON.stringify(store.getState()));
+  }
+
+  onRestore() {
+    const nextState = localStorage.getItem('savedStore');
+    if (nextState) {
+      this.props.hydrate(nextState);
+    }
+  }
+
   render() {
     const { selectedPoint } = this.props;
-    if (!selectedPoint) {
-      return null;
-    }
     return (
       <div style={styles.main}>
-        <button onClick={this.onClick}>
-          Raise
-        </button>
+        <div>
+          <button
+            onClick={this.onRaise}
+            disabled={!selectedPoint}
+          >
+            Raise
+          </button>
+        </div>
+        <div>
+          <button onClick={this.onSave}>
+            Save
+          </button>
+        </div>
+        <div>
+          <button onClick={this.onRestore}>
+            Restore
+          </button>
+        </div>
       </div>
     );
   }
@@ -39,4 +67,4 @@ class Toolbox extends Component {
 
 export default connect(state => ({
   selectedPoint: state.selectedPoint
-}), {raisePoint})(Toolbox);
+}), {hydrate, raisePoint})(Toolbox);

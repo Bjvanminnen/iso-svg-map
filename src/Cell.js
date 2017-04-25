@@ -57,7 +57,7 @@ const polygons = {
   // '1011': genPoly(leftRight, [colors.flat, colors.angle]),
   '1100': genPoly(all, [colors.angleLeft]),
   '1101': genPoly(topBottom, [colors.flat, colors.angleFront]),
-  // '1110': genPoly(leftRight, [colors.angle, colors.flat])
+  '1110': genPoly(leftRight, [colors.angleLeft, colors.flat])
 };
 
 class Cell extends Component {
