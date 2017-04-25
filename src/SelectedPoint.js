@@ -5,8 +5,10 @@ import { pointScreenPos } from './redux/grid';
 class SelectedPoint extends Component {
   render() {
     const { selectedPoint, grid } = this.props;
+    if (!selectedPoint) {
+      return null;
+    }
     const { x, y } = pointScreenPos(grid, selectedPoint.x, selectedPoint.y);
-
 
     return (
       <circle cx={x} cy={y} r="5" fill="white"/>

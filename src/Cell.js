@@ -39,20 +39,25 @@ const genPoly = (points, colors) => {
   }));
 };
 
+const all = [allPoints];
+const topBottom = [topPoints, bottomPoints];
+const leftRight = [leftPoints, rightPoints];
+
 const polygons = {
-  '0000': genPoly([allPoints], [colors.flat]),
-  '0001': genPoly([leftPoints, rightPoints], [colors.angleRight, colors.flat]),
-  '0010': genPoly([topPoints, bottomPoints], [colors.flat, colors.angleRight]),
-  '0011': genPoly([allPoints], [colors.angleRight]),
-  '0100': genPoly([leftPoints, rightPoints], [colors.flat, colors.angleLeft]),
-  '0110': genPoly([allPoints], [colors.angleLeft]),
-  '0111': genPoly([topPoints, bottomPoints], [colors.angleLeft, colors.flat]),
-  '1000': genPoly([topPoints, bottomPoints], [colors.angleFront, colors.flat]),
-  '1001': genPoly([allPoints], [colors.angleRight]),
-  // '1011': genPoly([leftPoints, rightPoints], [colors.flat, colors.angle]),
-  '1100': genPoly([allPoints], [colors.angleLeft]),
-  '1101': genPoly([topPoints, bottomPoints], [colors.flat, colors.angleFront]),
-  // '1110': genPoly([leftPoints, rightPoints], [colors.angle, colors.flat])
+  '0000': genPoly(all, [colors.flat]),
+  '0001': genPoly(leftRight, [colors.angleRight, colors.flat]),
+  '0010': genPoly(topBottom, [colors.flat, colors.angleRight]),
+  '0011': genPoly(all, [colors.angleRight]),
+  '0100': genPoly(leftRight, [colors.flat, colors.angleLeft]),
+  '0110': genPoly(all, [colors.angleLeft]),
+  '0111': genPoly(topBottom, [colors.angleLeft, colors.flat]),
+  '1000': genPoly(topBottom, [colors.angleFront, colors.flat]),
+  '1001': genPoly(all, [colors.angleRight]),
+  '1010': genPoly(topBottom, [colors.angleFront, colors.angleBack]),
+  // '1011': genPoly(leftRight, [colors.flat, colors.angle]),
+  '1100': genPoly(all, [colors.angleLeft]),
+  '1101': genPoly(topBottom, [colors.flat, colors.angleFront]),
+  // '1110': genPoly(leftRight, [colors.angle, colors.flat])
 };
 
 class Cell extends Component {
@@ -71,6 +76,7 @@ class Cell extends Component {
 
   onClick() {
     const { selectPoint, x, y } = this.props;
+    // TODO - probably want to find closest point instead of top point
     selectPoint(x, y);
   }
 
