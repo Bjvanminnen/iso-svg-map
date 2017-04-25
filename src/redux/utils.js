@@ -1,8 +1,8 @@
 const HYDRATE = 'utils/hydrate';
-export function hydrate(newState) {
+export function hydrate(state) {
   return {
     type: HYDRATE,
-    state: JSON.parse(newState)
+    state
   };
 }
 
