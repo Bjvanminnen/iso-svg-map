@@ -11,6 +11,12 @@ store.dispatch(createGrid(10, 10));
 store.dispatch(raisePoint(3, 3));
 store.dispatch(raisePoint(3, 3));
 
+setTimeout(() => {
+  store.dispatch(raisePoint(3, 4));
+  store.dispatch(raisePoint(4, 4));
+  store.dispatch(raisePoint(4, 3));
+}, 3000);
+
 ReactDOM.render(
   <Provider store={store}>
     <App />

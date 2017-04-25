@@ -10,8 +10,8 @@ class App extends Component {
 
   render() {
     return (
-      <svg height="500" width="800">
-        <g transform="translate(400, 50)">
+      <svg height="800" width="1200">
+        <g transform="translate(600, 50)">
           {this.props.cells.map((cell, index) => (
             <Cell
               key={index}

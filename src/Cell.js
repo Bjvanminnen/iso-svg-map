@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 import { getCorners, getCornerHeights } from './redux/grid';
 
 const colors = {
-  flat: '#00a000',
-  angle: '#008000',
-  angleRight: '#008000',
-  angleLeft: '#008000',
+  flat: '#98BC60',
+  angleFront: '#79A337',
+  angleBack: '#B5DA7A',
+  angleRight: '#B5DA7A',
+  angleLeft: '#79A337',
+  stroke: '#99b74f'
 };
 
 const pointString = (points) => (
@@ -38,18 +40,18 @@ const genPoly = (points, colors) => {
 
 const polygons = {
   '0000': genPoly([allPoints], [colors.flat]),
-  '0001': genPoly([leftPoints, rightPoints], [colors.angle, colors.flat]),
-  '0010': genPoly([topPoints, bottomPoints], [colors.flat, colors.angle]),
+  '0001': genPoly([leftPoints, rightPoints], [colors.angleRight, colors.flat]),
+  '0010': genPoly([topPoints, bottomPoints], [colors.flat, colors.angleRight]),
   '0011': genPoly([allPoints], [colors.angleRight]),
-  '0100': genPoly([leftPoints, rightPoints], [colors.flat, colors.angle]),
-  '0110': genPoly([allPoints], [colors.angle]),
-  '0111': genPoly([topPoints, bottomPoints], [colors.angle, colors.flat]),
-  '1000': genPoly([topPoints, bottomPoints], [colors.angle, colors.flat]),
+  '0100': genPoly([leftPoints, rightPoints], [colors.flat, colors.angleLeft]),
+  '0110': genPoly([allPoints], [colors.angleLeft]),
+  '0111': genPoly([topPoints, bottomPoints], [colors.angleLeft, colors.flat]),
+  '1000': genPoly([topPoints, bottomPoints], [colors.angleFront, colors.flat]),
   '1001': genPoly([allPoints], [colors.angleRight]),
-  '1011': genPoly([leftPoints, rightPoints], [colors.flat, colors.angle]),
+  // '1011': genPoly([leftPoints, rightPoints], [colors.flat, colors.angle]),
   '1100': genPoly([allPoints], [colors.angleLeft]),
-  '1101': genPoly([topPoints, bottomPoints], [colors.flat, colors.angle]),
-  '1110': genPoly([leftPoints, rightPoints], [colors.angle, colors.flat])
+  '1101': genPoly([topPoints, bottomPoints], [colors.flat, colors.angleFront]),
+  // '1110': genPoly([leftPoints, rightPoints], [colors.angle, colors.flat])
 };
 
 class Cell extends Component {
@@ -83,7 +85,7 @@ class Cell extends Component {
           key={-1}
           points={pointString(corners)}
           style={{
-            stroke: 'black',
+            stroke: colors.stroke,
             fill: 'none'
           }}
         />

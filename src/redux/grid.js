@@ -91,7 +91,7 @@ reducers[RAISE_POINT] = (state, action) => {
 // Helpers
 const TILE_HEIGHT_HALF = 32;
 const TILE_WIDTH_HALF = TILE_HEIGHT_HALF * 2;
-const HEIGHT_DELTA = 20;
+const HEIGHT_DELTA = 24;
 
 function pointKey(x, y) {
   return `${x}_${y}`;
