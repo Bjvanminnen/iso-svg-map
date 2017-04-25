@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getCorners, getCornerHeights } from './redux/grid';
-import { selectPoint } from './redux/selectedPoints';
+import { selectPoint, addPoint } from './redux/selectedPoints';
 
 const colors = {
   flat: '#98BC60',
@@ -79,10 +79,14 @@ class Cell extends Component {
     this.onClick = this.onClick.bind(this);
   }
 
-  onClick() {
-    const { selectPoint, x, y } = this.props;
+  onClick(event) {
+    const { selectPoint, addPoint, x, y } = this.props;
     // TODO - probably want to find closest point instead of top point
-    selectPoint(x, y);
+    if (event.shiftKey) {
+      addPoint(x, y);
+    } else {
+      selectPoint(x, y);
+    }
   }
 
   render() {
@@ -122,5 +126,5 @@ export default connect((state, otherProps) => ({
   corners: getCorners(state.grid, otherProps.x, otherProps.y),
   cornerHeights: getCornerHeights(state.grid, otherProps.x, otherProps.y),
 }), ({
-  selectPoint
+  selectPoint, addPoint
 }))(Cell);
