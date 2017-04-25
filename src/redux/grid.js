@@ -21,7 +21,7 @@ function hydrator(state) {
 export default createReducer(initialState, reducers, hydrator);
 
 // CREATE_GRID
-const CREATE_GRID = 'grid/CREATE_GRID';
+export const CREATE_GRID = 'grid/CREATE_GRID';
 export const createGrid = (rows, cols) => ({
   type: CREATE_GRID,
   rows,

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import getStore from './redux/getStore';
 import { raisePoint } from './redux/grid';
 import { hydrate } from './redux/utils';
 
@@ -17,18 +16,12 @@ class Toolbox extends Component {
     super(props);
 
     this.onRaise = this.onRaise.bind(this);
-    this.onSave = this.onSave.bind(this);
     this.onRestore = this.onRestore.bind(this);
   }
 
   onRaise() {
     const { selectedPoint, raisePoint } = this.props;
     raisePoint(selectedPoint.x, selectedPoint.y);
-  }
-
-  onSave() {
-    const store = getStore();
-    localStorage.setItem('savedStore', JSON.stringify(store.getState()));
   }
 
   onRestore() {
@@ -48,11 +41,6 @@ class Toolbox extends Component {
             disabled={!selectedPoint}
           >
             Raise
-          </button>
-        </div>
-        <div>
-          <button onClick={this.onSave}>
-            Save
           </button>
         </div>
         <div>
