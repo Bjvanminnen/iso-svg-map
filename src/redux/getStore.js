@@ -3,6 +3,7 @@ import { createLogger } from 'redux-logger';
 import Immutable from 'immutable';
 
 import grid from './grid';
+import selectedPoint from './selectedPoint';
 
 let store;
 
@@ -10,7 +11,8 @@ export default function getStore() {
   if (!store) {
     store = createStore(
       combineReducers({
-        grid
+        grid,
+        selectedPoint,
       }),
       applyMiddleware(createLogger({
         collapsed: true,

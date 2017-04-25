@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getCorners, getCornerHeights } from './redux/grid';
+import { selectPoint } from './redux/selectedPoint';
 
 const colors = {
   flat: '#98BC60',
@@ -59,8 +60,19 @@ class Cell extends Component {
     corners: PropTypes.array.isRequired,
     cornerHeights: PropTypes.array.isRequired,
     x: PropTypes.number.isRequired,
-    y: PropTypes.number.isRequired
+    y: PropTypes.number.isRequired,
+    selectPoint: PropTypes.func.isRequired
   };
+
+  constructor(props) {
+    super(props);
+    this.onClick = this.onClick.bind(this);
+  }
+
+  onClick() {
+    const { selectPoint, x, y } = this.props;
+    selectPoint(x, y);
+  }
 
   render() {
     const { corners, cornerHeights } = this.props;
@@ -79,6 +91,7 @@ class Cell extends Component {
               stroke: poly.color,
               fill: poly.color
             }}
+            onClick={this.onClick}
           />
         ))}
         <polygon
@@ -97,4 +110,6 @@ class Cell extends Component {
 export default connect((state, otherProps) => ({
   corners: getCorners(state.grid, otherProps.x, otherProps.y),
   cornerHeights: getCornerHeights(state.grid, otherProps.x, otherProps.y),
+}), ({
+  selectPoint
 }))(Cell);

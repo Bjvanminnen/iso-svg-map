@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Cell from './Cell';
+import SelectedPoint from './SelectedPoint';
 
 class App extends Component {
   static propTypes = {
-    cells: PropTypes.array.isRequired
+    cells: PropTypes.array.isRequired,
+    selectedPoint: PropTypes.object
   };
 
   render() {
@@ -19,6 +21,9 @@ class App extends Component {
               y={cell.y}
             />
           ))}
+          {this.props.selectedPoint && (
+            <SelectedPoint/>
+          )}
         </g>
       </svg>
     );
@@ -26,5 +31,6 @@ class App extends Component {
 }
 
 export default connect(state => ({
-  cells: state.grid.cells
+  cells: state.grid.cells,
+  selectedPoint: state.selectedPoint
 }))(App);

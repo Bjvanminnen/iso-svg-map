@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
+import createReducer from './createReducer';
 
 let reducers = {};
-
 const initialState = {
   rows: 0,
   cols: 0,
@@ -10,13 +10,7 @@ const initialState = {
 };
 
 // Primary reducer
-export default function(state = initialState, action) {
-  const reducer = reducers[action.type];
-  if (!reducer) {
-    return state;
-  }
-  return reducer(state, action);
-}
+export default createReducer(initialState, reducers);
 
 // CREATE_GRID
 const CREATE_GRID = 'grid/CREATE_GRID';
@@ -90,14 +84,14 @@ reducers[RAISE_POINT] = (state, action) => {
 
 // Helpers
 const TILE_HEIGHT_HALF = 32;
-const TILE_WIDTH_HALF = TILE_HEIGHT_HALF * 2;
+const TILE_WIDTH_HALF = 64;
 const HEIGHT_DELTA = 24;
 
 function pointKey(x, y) {
   return `${x}_${y}`;
 }
 
-const pointScreenPos = (state, x, y) => {
+export const pointScreenPos = (state, x, y) => {
   const height = state.heights.get(pointKey(x, y));
   return {
     x: (x - y) * TILE_WIDTH_HALF,
