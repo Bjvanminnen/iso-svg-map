@@ -15,11 +15,17 @@ class Toolbox extends Component {
     super(props);
 
     this.onRaise = this.onRaise.bind(this);
+    this.onClear = this.onClear.bind(this);
   }
 
   onRaise() {
     const { selectedPoint, raisePoint } = this.props;
     raisePoint(selectedPoint.x, selectedPoint.y);
+  }
+
+  onClear() {
+    localStorage.removeItem('savedStore');
+    window.location.reload();
   }
 
   render() {
@@ -32,6 +38,13 @@ class Toolbox extends Component {
             disabled={!selectedPoint}
           >
             Raise
+          </button>
+        </div>
+        <div>
+          <button
+            onClick={this.onClear}
+          >
+            Clear
           </button>
         </div>
       </div>
