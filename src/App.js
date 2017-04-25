@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Cell from './Cell';
-import SelectedPoint from './SelectedPoint';
+import SelectedPoints from './SelectedPoints';
 import Toolbox from './Toolbox';
 
 class App extends Component {
   static propTypes = {
-    cells: PropTypes.array.isRequired,
-    selectedPoint: PropTypes.object
+    cells: PropTypes.array.isRequired
   };
 
   render() {
@@ -23,7 +22,7 @@ class App extends Component {
                 y={cell.y}
               />
             ))}
-            <SelectedPoint/>
+            <SelectedPoints/>
           </g>
         </svg>
         <Toolbox/>
@@ -33,6 +32,5 @@ class App extends Component {
 }
 
 export default connect(state => ({
-  cells: state.grid.cells,
-  selectedPoint: state.selectedPoint
+  cells: state.grid.cells
 }))(App);

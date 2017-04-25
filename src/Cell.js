@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getCorners, getCornerHeights } from './redux/grid';
-import { selectPoint } from './redux/selectedPoint';
+import { selectPoint } from './redux/selectedPoints';
 
 const colors = {
   flat: '#98BC60',

@@ -19,8 +19,8 @@ class Toolbox extends Component {
   }
 
   onRaise() {
-    const { selectedPoint, raisePoint } = this.props;
-    raisePoint(selectedPoint.x, selectedPoint.y);
+    const { selectedPoints, raisePoint } = this.props;
+    raisePoint(selectedPoints[0].x, selectedPoints[0].y);
   }
 
   onClear() {
@@ -29,13 +29,13 @@ class Toolbox extends Component {
   }
 
   render() {
-    const { selectedPoint } = this.props;
+    const { selectedPoints } = this.props;
     return (
       <div style={styles.main}>
         <div>
           <button
             onClick={this.onRaise}
-            disabled={!selectedPoint}
+            disabled={selectedPoints.length === 0}
           >
             Raise
           </button>
@@ -53,5 +53,5 @@ class Toolbox extends Component {
 }
 
 export default connect(state => ({
-  selectedPoint: state.selectedPoint
+  selectedPoints: state.selectedPoints
 }), {raisePoint})(Toolbox);
