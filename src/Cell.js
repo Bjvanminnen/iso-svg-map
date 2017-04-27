@@ -65,6 +65,20 @@ const polygons = {
   '1110': genPoly(leftRight, [colors.angleSouthWest, colors.flat])
 };
 
+/**
+ * Convert a point from client space to svg space, based on any transforms on
+ * the provided svg element
+ */
+const clientPointToSvgPoint = (element, x, y) => {
+  const svg = document.getElementsByTagName('svg')[0];
+  const matrix = element.getCTM();
+  let point = svg.createSVGPoint();
+  point.x = x;
+  point.y = y;
+  const nextPoint = point.matrixTransform(matrix.inverse());
+  return nextPoint;
+};
+
 class Cell extends Component {
   static propTypes = {
     corners: PropTypes.array.isRequired,
@@ -80,12 +94,36 @@ class Cell extends Component {
   }
 
   onClick(event) {
-    const { selectPoint, addPoint, x, y } = this.props;
-    // TODO - probably want to find closest point instead of top point
+    const { selectPoint, addPoint, corners, x, y } = this.props;
+
+    const svgClick = clientPointToSvgPoint(event.target, event.clientX, event.clientY);
+
+    // find the closest corner
+    let minIndex = -1;
+    let minDist = Infinity;
+    corners.forEach(({x, y}, index) => {
+      const deltaX = x - svgClick.x;
+      const deltaY = y - svgClick.y;
+      const dist = deltaX * deltaX + deltaY * deltaY;
+      if (dist < minDist) {
+        minDist = dist;
+        minIndex = index;
+      }
+    });
+    const adjusts = [
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 1, y: 1 },
+      { x: 0, y: 1 }
+    ];
+
+    const cellX = x + adjusts[minIndex].x;
+    const cellY = y + adjusts[minIndex].y;
+
     if (event.shiftKey) {
-      addPoint(x, y);
+      addPoint(cellX, cellY);
     } else {
-      selectPoint(x, y);
+      selectPoint(cellX, cellY);
     }
   }
 
@@ -116,6 +154,7 @@ class Cell extends Component {
             stroke: colors.stroke,
             fill: 'none'
           }}
+          onClick={this.onClick}
         />
       </g>
     );
