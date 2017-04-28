@@ -13,8 +13,18 @@ try {
   const state = JSON.parse(savedStore);
   store.dispatch(hydrate(state));
 } catch (err) {
-  store.dispatch(createGrid(10, 10));
+  store.dispatch(createGrid(15, 15));
 }
+
+// TODO
+// - explore color schemes
+// - undo
+// - select entire cell when you click in the middle
+// - lowering points
+
+// TODO - stretch
+// - water? other terrain?
+// fog of war?
 
 ReactDOM.render(
   <Provider store={store}>

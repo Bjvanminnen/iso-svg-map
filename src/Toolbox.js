@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { raisePoint } from './redux/grid';
+import { raisePoints } from './redux/grid';
 
 const styles = {
   main: {
@@ -19,8 +19,8 @@ class Toolbox extends Component {
   }
 
   onRaise() {
-    const { selectedPoints, raisePoint } = this.props;
-    raisePoint(selectedPoints[0].x, selectedPoints[0].y);
+    const { selectedPoints, raisePoints } = this.props;
+    raisePoints(selectedPoints);
   }
 
   onClear() {
@@ -54,4 +54,4 @@ class Toolbox extends Component {
 
 export default connect(state => ({
   selectedPoints: state.selectedPoints
-}), {raisePoint})(Toolbox);
+}), {raisePoints})(Toolbox);

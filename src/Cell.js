@@ -96,6 +96,8 @@ class Cell extends Component {
   onClick(event) {
     const { selectPoint, addPoint, corners, x, y } = this.props;
 
+    // TODO - seems like there might be some bugs in lower right quadrant cells
+    console.log(event.clientX, event.clientY);
     const svgClick = clientPointToSvgPoint(event.target, event.clientX, event.clientY);
 
     // find the closest corner
@@ -141,7 +143,7 @@ class Cell extends Component {
             key={key}
             points={pointString(poly.points.map(index => corners[index]))}
             style={{
-              stroke: poly.color,
+              stroke: '#c6e398',
               fill: poly.color
             }}
             onClick={this.onClick}
@@ -151,7 +153,7 @@ class Cell extends Component {
           key={-1}
           points={pointString(corners)}
           style={{
-            stroke: colors.stroke,
+            stroke: colors.stroke,            
             fill: 'none'
           }}
           onClick={this.onClick}

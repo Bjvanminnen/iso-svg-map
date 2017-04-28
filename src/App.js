@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import GroundBox from './GroundBox';
 import Cell from './Cell';
 import SelectedPoints from './SelectedPoints';
 import Toolbox from './Toolbox';
@@ -14,7 +15,8 @@ class App extends Component {
     return (
       <div>
         <svg height="800" width="1200">
-          <g transform="translate(600, 50) scale(0.8)">
+          <g transform="translate(600, 50) scale(0.4)">
+            <GroundBox/>
             {this.props.cells.map((cell, index) => (
               <Cell
                 key={index}

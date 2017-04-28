@@ -50,14 +50,14 @@ reducers[CREATE_GRID] = (state, action) => {
   };
 }
 
+// TODO - also need lower point
 // RAISE_POINT
 const RAISE_POINT = 'grid/RAISE_POINT';
-export const raisePoint = (x, y) => ({
+export const raisePoints = (points) => ({
   type: RAISE_POINT,
-  x,
-  y
+  points
 });
-const raisePointsRecursively = (heights, x, y) => {
+const raisePointRecursively = (heights, x, y) => {
   const updatedHeight = heights.get(pointKey(x, y)) + 1;
   heights = heights.set(pointKey(x, y), updatedHeight);
   [
@@ -75,18 +75,29 @@ const raisePointsRecursively = (heights, x, y) => {
     }
     const thisHeight = heights.get(pointKey(otherX, otherY));
     if (updatedHeight - thisHeight > 1) {
-      heights = raisePointsRecursively(heights, otherX, otherY);
+      heights = raisePointRecursively(heights, otherX, otherY);
     }
   });
 
   return heights;
 };
 
+// TODO write test?
 reducers[RAISE_POINT] = (state, action) => {
-  const { x, y } = action;
+  const { points } = action;
+
+  let currentHeights = state.heights;
+  let targetHeights = points.map(({x, y}) => currentHeights.get(pointKey(x, y)) + 1);
+  points.forEach(({x,y}, index) => {
+    const height = currentHeights.get(pointKey(x, y));
+    if (height < targetHeights[index]) {
+      currentHeights = raisePointRecursively(currentHeights, x, y);
+    }
+  });
+
   return {
     ...state,
-    heights: raisePointsRecursively(state.heights, x, y)
+    heights: currentHeights
   };
 };
 
