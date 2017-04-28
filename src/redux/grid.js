@@ -1,10 +1,6 @@
 import Immutable from 'immutable';
 import { HYDRATE } from './hydration';
-
-// TODO - maybe make a grid display class?
-const TILE_HEIGHT_HALF = 32;
-const TILE_WIDTH_HALF = 64;
-const HEIGHT_DELTA = 24;
+import { pointKey } from '../utils';
 
 export const CREATE_GRID = 'grid/CREATE_GRID';
 export const createGrid = (rows, cols) => ({
@@ -105,31 +101,3 @@ function raisePointRecursively(heights, x, y) {
 
   return heights;
 };
-
-
-// Helpers
-function pointKey(x, y) {
-  return `${x}_${y}`;
-}
-
-export const pointScreenPos = (state, x, y) => {
-  const height = state.heights.get(pointKey(x, y));
-  return {
-    x: (x - y) * TILE_WIDTH_HALF,
-    y: (x + y) * TILE_HEIGHT_HALF - HEIGHT_DELTA * height,
-  };
-};
-
-export const getCorners = (state, x, y) => ([
-  pointScreenPos(state, x, y),
-  pointScreenPos(state, x + 1, y),
-  pointScreenPos(state, x + 1, y + 1),
-  pointScreenPos(state, x, y + 1)
-]);
-
-export const getCornerHeights = (state, x, y) => ([
-  state.heights.get(pointKey(x, y)),
-  state.heights.get(pointKey(x + 1, y)),
-  state.heights.get(pointKey(x + 1, y + 1)),
-  state.heights.get(pointKey(x, y + 1)),
-]);

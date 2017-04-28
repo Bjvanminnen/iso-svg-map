@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getCorners, getCornerHeights } from './redux/grid';
+import { getCorners, getCornerHeights } from './gridDisplay';
 import { selectPoint, addPoint } from './redux/selectedPoints';
+import { pointString } from './utils';
 
 const colors = {
   flat: '#98BC60',
@@ -16,10 +17,6 @@ const colors = {
   angleNorthWest: '#79A337',
   stroke: '#99b74f'
 };
-
-const pointString = (points) => (
-  points.map(p => [p.x, p.y].join(',')).join(' ')
-);
 
 const heightsKey = (heights) => {
   const min = Math.min(...heights);
@@ -153,7 +150,7 @@ class Cell extends Component {
           key={-1}
           points={pointString(corners)}
           style={{
-            stroke: colors.stroke,            
+            stroke: colors.stroke,
             fill: 'none'
           }}
           onClick={this.onClick}
@@ -164,8 +161,8 @@ class Cell extends Component {
 }
 
 export default connect((state, otherProps) => ({
-  corners: getCorners(state.grid, otherProps.x, otherProps.y),
-  cornerHeights: getCornerHeights(state.grid, otherProps.x, otherProps.y),
+  corners: getCorners(state.grid.heights, otherProps.x, otherProps.y),
+  cornerHeights: getCornerHeights(state.grid.heights, otherProps.x, otherProps.y),
 }), ({
   selectPoint, addPoint
 }))(Cell);

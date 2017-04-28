@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getCorners } from './redux/grid';
-
-// TODO - duplicated
-const pointString = (points) => (
-  points.map(p => [p.x, p.y].join(',')).join(' ')
-);
-const TILE_HEIGHT_HALF = 32;
-const TILE_WIDTH_HALF = 64;
+import { TILE_HEIGHT_HALF, TILE_WIDTH_HALF, getCorners } from './gridDisplay';
+import { pointString } from './utils';
 
 class GroundBox extends Component {
   render() {
@@ -65,8 +59,8 @@ class GroundBox extends Component {
 export default connect(state => {
   const grid = state.grid;
   const { rows, cols } = grid;
-  const leftCorner = getCorners(grid, 0, rows - 1)[3];
-  const rightCorner = getCorners(grid, cols - 1, 0)[1];
+  const leftCorner = getCorners(grid.heights, 0, rows - 1)[3];
+  const rightCorner = getCorners(grid.heights, cols - 1, 0)[1];
   return {
     leftCorner,
     rightCorner,
