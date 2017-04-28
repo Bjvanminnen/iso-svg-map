@@ -19,8 +19,8 @@ try {
 // TODO
 // - explore color schemes
 // - undo
-// - select entire cell when you click in the middle
 // - lowering points
+// - deselect point
 
 // TODO - stretch
 // - water? other terrain?

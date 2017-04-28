@@ -92,23 +92,6 @@ class Cell extends Component {
 
   onClick(event) {
     const { selectPoint, addPoint, corners, x, y } = this.props;
-
-    // TODO - seems like there might be some bugs in lower right quadrant cells
-    console.log(event.clientX, event.clientY);
-    const svgClick = clientPointToSvgPoint(event.target, event.clientX, event.clientY);
-
-    // find the closest corner
-    let minIndex = -1;
-    let minDist = Infinity;
-    corners.forEach(({x, y}, index) => {
-      const deltaX = x - svgClick.x;
-      const deltaY = y - svgClick.y;
-      const dist = deltaX * deltaX + deltaY * deltaY;
-      if (dist < minDist) {
-        minDist = dist;
-        minIndex = index;
-      }
-    });
     const adjusts = [
       { x: 0, y: 0 },
       { x: 1, y: 0 },
@@ -116,14 +99,43 @@ class Cell extends Component {
       { x: 0, y: 1 }
     ];
 
-    const cellX = x + adjusts[minIndex].x;
-    const cellY = y + adjusts[minIndex].y;
+    // TODO - seems like there might be some bugs in lower right quadrant cells
+    const svgClick = clientPointToSvgPoint(event.target, event.clientX, event.clientY);
 
-    if (event.shiftKey) {
-      addPoint(cellX, cellY);
+    const singlePoint = event.ctrlKey;
+
+    let pointsToAdd = [];
+    if (singlePoint) {
+      // find the closest corner
+      let minIndex = -1;
+      let minDist = Infinity;
+      corners.forEach(({x, y}, index) => {
+        const deltaX = x - svgClick.x;
+        const deltaY = y - svgClick.y;
+        const dist = deltaX * deltaX + deltaY * deltaY;
+        if (dist < minDist) {
+          minDist = dist;
+          minIndex = index;
+        }
+      });
+      pointsToAdd.push({
+        x: x + adjusts[minIndex].x,
+        y: y + adjusts[minIndex].y
+      });
     } else {
-      selectPoint(cellX, cellY);
+      pointsToAdd = adjusts.map(adjustment => ({
+        x: x + adjustment.x,
+        y: y + adjustment.y
+      }));
     }
+
+    pointsToAdd.forEach(({x, y}, index) => {
+      if (event.shiftKey || index > 0) {
+        addPoint(x, y);
+      } else {
+        selectPoint(x, y);
+      }
+    });
   }
 
   render() {
