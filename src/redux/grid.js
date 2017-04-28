@@ -58,13 +58,15 @@ export default function grid(state = initialState, action) {
   // TODO write test?
   if (action.type === RAISE_POINTS) {
     const { points } = action;
+    // TODO - part of action?
+    const maxDelta = 2;
 
     let currentHeights = state.heights;
     let targetHeights = points.map(({x, y}) => currentHeights.get(pointKey(x, y)) + 1);
     points.forEach(({x,y}, index) => {
       const height = currentHeights.get(pointKey(x, y));
       if (height < targetHeights[index]) {
-        currentHeights = raisePointRecursively(currentHeights, x, y);
+        currentHeights = raisePointRecursively(currentHeights, x, y, maxDelta);
       }
     });
 
@@ -77,7 +79,7 @@ export default function grid(state = initialState, action) {
   return state;
 }
 
-function raisePointRecursively(heights, x, y) {
+function raisePointRecursively(heights, x, y, maxDelta) {
   const updatedHeight = heights.get(pointKey(x, y)) + 1;
   heights = heights.set(pointKey(x, y), updatedHeight);
   [
@@ -94,8 +96,8 @@ function raisePointRecursively(heights, x, y) {
       return;
     }
     const thisHeight = heights.get(pointKey(otherX, otherY));
-    if (updatedHeight - thisHeight > 1) {
-      heights = raisePointRecursively(heights, otherX, otherY);
+    if (updatedHeight - thisHeight > maxDelta) {
+      heights = raisePointRecursively(heights, otherX, otherY, maxDelta);
     }
   });
 
