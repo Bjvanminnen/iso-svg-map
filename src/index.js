@@ -5,7 +5,7 @@ import './index.css';
 import { Provider } from 'react-redux';
 import getStore from './redux/getStore';
 import { createGrid } from './redux/grid';
-import { hydrate } from './redux/utils';
+import { hydrate } from './redux/hydration';
 
 const store = getStore();
 const savedStore = localStorage.getItem('savedStore');

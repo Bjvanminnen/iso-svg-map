@@ -1,26 +1,11 @@
 import Immutable from 'immutable';
-import { createReducer } from './utils';
+import { HYDRATE } from './hydration';
 
-let reducers = {};
-const initialState = {
-  rows: 0,
-  cols: 0,
-  heights: Immutable.Map(),
-  cells: []
-};
+// TODO - maybe make a grid display class?
+const TILE_HEIGHT_HALF = 32;
+const TILE_WIDTH_HALF = 64;
+const HEIGHT_DELTA = 24;
 
-function hydrator(state) {
-  // state => ({
-  return ({
-    ...state.grid,
-    heights: Immutable.fromJS(state.grid.heights)
-  });
-}
-
-// Primary reducer
-export default createReducer(initialState, reducers, hydrator);
-
-// CREATE_GRID
 export const CREATE_GRID = 'grid/CREATE_GRID';
 export const createGrid = (rows, cols) => ({
   type: CREATE_GRID,
@@ -28,36 +13,75 @@ export const createGrid = (rows, cols) => ({
   cols
 });
 
-reducers[CREATE_GRID] = (state, action) => {
-  const { rows, cols } = action;
-  let heights = Immutable.Map();
-  let cells = [];
-  for (let x = 0; x < cols + 1; x++) {
-    for (let y = 0; y < rows + 1; y++) {
-      heights = heights.set(pointKey(x, y), 0);
-      if (x < cols && y < rows) {
-        cells.push({x, y});
-      }
+// TODO - also need lower point
+const RAISE_POINTS = 'grid/RAISE_POINTS';
+export const raisePoints = (points) => ({
+  type: RAISE_POINTS,
+  points
+});
+
+const initialState = {
+  rows: 0,
+  cols: 0,
+  heights: Immutable.Map(),
+  cells: []
+};
+
+// Primary reducer
+export default function grid(state = initialState, action) {
+  if (action.type === HYDRATE) {
+    const hydratedState = action.state.grid;
+    return {
+      ...hydratedState,
+      heights: Immutable.fromJS(hydratedState.heights)
     }
   }
 
-  return {
-    ...state,
-    rows,
-    cols,
-    heights,
-    cells
-  };
+  if (action.type === CREATE_GRID) {
+    const { rows, cols } = action;
+    let heights = Immutable.Map();
+    let cells = [];
+    for (let x = 0; x < cols + 1; x++) {
+      for (let y = 0; y < rows + 1; y++) {
+        heights = heights.set(pointKey(x, y), 0);
+        if (x < cols && y < rows) {
+          cells.push({x, y});
+        }
+      }
+    }
+
+    return {
+      ...state,
+      rows,
+      cols,
+      heights,
+      cells
+    };
+  }
+
+  // TODO write test?
+  if (action.type === RAISE_POINTS) {
+    const { points } = action;
+
+    let currentHeights = state.heights;
+    let targetHeights = points.map(({x, y}) => currentHeights.get(pointKey(x, y)) + 1);
+    points.forEach(({x,y}, index) => {
+      const height = currentHeights.get(pointKey(x, y));
+      if (height < targetHeights[index]) {
+        currentHeights = raisePointRecursively(currentHeights, x, y);
+      }
+    });
+
+    return {
+      ...state,
+      heights: currentHeights
+    };
+  }
+
+  return state;
 }
 
-// TODO - also need lower point
-// RAISE_POINT
-const RAISE_POINT = 'grid/RAISE_POINT';
-export const raisePoints = (points) => ({
-  type: RAISE_POINT,
-  points
-});
-const raisePointRecursively = (heights, x, y) => {
+function raisePointRecursively(heights, x, y) {
   const updatedHeight = heights.get(pointKey(x, y)) + 1;
   heights = heights.set(pointKey(x, y), updatedHeight);
   [
@@ -82,30 +106,8 @@ const raisePointRecursively = (heights, x, y) => {
   return heights;
 };
 
-// TODO write test?
-reducers[RAISE_POINT] = (state, action) => {
-  const { points } = action;
-
-  let currentHeights = state.heights;
-  let targetHeights = points.map(({x, y}) => currentHeights.get(pointKey(x, y)) + 1);
-  points.forEach(({x,y}, index) => {
-    const height = currentHeights.get(pointKey(x, y));
-    if (height < targetHeights[index]) {
-      currentHeights = raisePointRecursively(currentHeights, x, y);
-    }
-  });
-
-  return {
-    ...state,
-    heights: currentHeights
-  };
-};
 
 // Helpers
-const TILE_HEIGHT_HALF = 32;
-const TILE_WIDTH_HALF = 64;
-const HEIGHT_DELTA = 24;
-
 function pointKey(x, y) {
   return `${x}_${y}`;
 }
