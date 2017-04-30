@@ -1,28 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { TILE_HEIGHT_HALF, TILE_WIDTH_HALF, getCorners } from './gridDisplay';
+import { getCorners, pointScreenPosHeightless } from './gridDisplay';
 import { pointString } from './utils';
 
 class GroundBox extends Component {
   render() {
     const { leftCorner, rightCorner, rows, cols } = this.props;
 
-    const leftLower = {
-      x: -cols * TILE_WIDTH_HALF,
-      y: rows * TILE_HEIGHT_HALF + 100,
-    };
+    let leftLower = pointScreenPosHeightless(0, rows);
+    leftLower.y += 100;
+
+    let bottomLower = pointScreenPosHeightless(cols, rows);
+    bottomLower.y += 100;
+
     const bottomHigher = {
-      x: 0,
+      x: bottomLower.x,
       y: Math.min(leftCorner.y, rightCorner.y)
     };
-    const bottomLower = {
-      x: 0,
-      y: rows * TILE_HEIGHT_HALF * 2 + 100
-    };
-    const rightLower = {
-      x: cols * TILE_WIDTH_HALF,
-      y: rows * TILE_HEIGHT_HALF + 100
-    };
+
+    let rightLower = pointScreenPosHeightless(cols, 0);
+    rightLower.y += 100;
 
     const points = [
       leftCorner,

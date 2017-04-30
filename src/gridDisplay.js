@@ -4,13 +4,16 @@ export const TILE_HEIGHT_HALF = 32;
 export const TILE_WIDTH_HALF = 64;
 export const HEIGHT_DELTA = 24;
 
-export const pointScreenPos = (heights, x, y) => {
-  const height = heights.get(pointKey(x, y));
-  return {
-    x: (x - y) * TILE_WIDTH_HALF,
-    y: (x + y) * TILE_HEIGHT_HALF - HEIGHT_DELTA * height,
-  };
-};
+const pointFromHeight = (height, x, y) => ({
+  x: (x - y) * TILE_WIDTH_HALF,
+  y: (x + y) * TILE_HEIGHT_HALF - HEIGHT_DELTA * height,
+});
+
+export const pointScreenPosHeightless = (x, y) => pointFromHeight(0, x, y);
+
+export const pointScreenPos = (heights, x, y) => (
+  pointFromHeight(heights.get(pointKey(x, y)), x, y)
+);
 
 export const getCorners = (heights, x, y) => ([
   pointScreenPos(heights, x, y),
