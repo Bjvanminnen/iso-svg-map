@@ -6,7 +6,9 @@ export const selectPoint = (x, y) => ({ type: SELECT_POINT, x, y });
 const ADD_POINT = 'selectedPoints/ADD_POINT';
 export const addPoint = (x, y) => ({ type: ADD_POINT, x, y });
 
-// export default createReducer([], reducers, 'selectedPoints');
+const CLEAR_SELECTION = 'selectedPoints/CLEAR_SELECTION';
+export const clearSelection = () => ({ type: CLEAR_SELECTION });
+
 export default function selectedPoints(state = [], action) {
   if (action.type === HYDRATE) {
     return action.state.selectedPoints;
@@ -24,6 +26,10 @@ export default function selectedPoints(state = [], action) {
       return state;
     }
     return state.concat({x, y});
+  }
+
+  if (action.type === CLEAR_SELECTION) {
+    return [];
   }
 
   return state;
