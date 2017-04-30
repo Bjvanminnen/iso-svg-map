@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { raisePoints } from './redux/grid';
+import { raisePoints, scaleHeights } from './redux/grid';
 import { clearSelection } from './redux/selectedPoints';
 
 const styles = {
@@ -55,6 +55,13 @@ class Toolbox extends Component {
             Clear Selection
           </button>
         </div>
+        <div>
+          <button
+            onClick={this.props.scaleHeights.bind(this, 2)}
+          >
+            Double
+          </button>
+        </div>
       </div>
     );
   }
@@ -62,4 +69,8 @@ class Toolbox extends Component {
 
 export default connect(state => ({
   selectedPoints: state.selectedPoints
-}), {raisePoints, clearSelection})(Toolbox);
+}), {
+  raisePoints,
+  clearSelection,
+  scaleHeights
+})(Toolbox);

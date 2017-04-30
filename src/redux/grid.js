@@ -16,6 +16,9 @@ export const raisePoints = (points) => ({
   points
 });
 
+const SCALE_HEIGHTS = 'grid/SCALE_HEIGHTS';
+export const scaleHeights = (scaleFactor) => ({ type: SCALE_HEIGHTS, scaleFactor });
+
 const initialState = {
   rows: 0,
   cols: 0,
@@ -73,6 +76,14 @@ export default function grid(state = initialState, action) {
     return {
       ...state,
       heights: currentHeights
+    };
+  }
+
+  if (action.type === SCALE_HEIGHTS) {
+    const scaleFactor = action.scaleFactor;
+    return {
+      ...state,
+      heights: state.heights.map(x => x * scaleFactor)
     };
   }
 
