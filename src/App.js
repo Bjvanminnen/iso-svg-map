@@ -16,15 +16,17 @@ class App extends Component {
       <div>
         <svg height="800" width="1200">
           <g transform="translate(600, 50) scale(0.4)">
-            <GroundBox/>
-            {this.props.cells.map((cell, index) => (
-              <Cell
-                key={index}
-                x={cell.x}
-                y={cell.y}
-              />
-            ))}
-            <SelectedPoints/>
+            <g>
+              <GroundBox/>
+              {this.props.cells.map((cell, index) => (
+                <Cell
+                  key={index}
+                  x={cell.x}
+                  y={cell.y}
+                />
+              ))}
+              <SelectedPoints/>
+            </g>
           </g>
         </svg>
         <Toolbox/>
