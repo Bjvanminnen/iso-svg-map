@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getCorners, getCornerHeights } from './gridDisplay';
 import { selectPoint, addPoint } from './redux/selectedPoints';
-import { pointString } from './utils';
+import { pointString, pointKey } from './utils';
+import createCachedSelector from 're-reselect';
 
 const colors = {
   flat: '#98BC60',
@@ -100,6 +101,7 @@ class Cell extends Component {
     ];
 
     // TODO - seems like there might be some bugs in lower right quadrant cells
+    // TODO - could have us select a plane rather than the entire cell?
     const svgClick = clientPointToSvgPoint(event.target, event.clientX, event.clientY);
 
     const singlePoint = event.ctrlKey;
@@ -172,9 +174,27 @@ class Cell extends Component {
   }
 }
 
+const getCornerSelector = createCachedSelector(
+  state => state.grid.heights,
+  (state, props) => props.x,
+  (state, props) => props.y,
+  getCorners
+)(
+  (state, props) => pointKey(props.x, props.y)
+);
+
+const getCornerHeightsSelector = createCachedSelector(
+  state => state.grid.heights,
+  (state, props) => props.x,
+  (state, props) => props.y,
+  getCornerHeights
+)(
+  (state, props) => pointKey(props.x, props.y)
+);
+
 export default connect((state, otherProps) => ({
-  corners: getCorners(state.grid.heights, otherProps.x, otherProps.y),
-  cornerHeights: getCornerHeights(state.grid.heights, otherProps.x, otherProps.y),
+  corners: getCornerSelector(state, otherProps),
+  cornerHeights: getCornerHeightsSelector(state, otherProps)
 }), ({
   selectPoint, addPoint
 }))(Cell);
