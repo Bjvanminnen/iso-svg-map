@@ -2,6 +2,8 @@ import Immutable from 'immutable';
 import { HYDRATE } from './hydration';
 import { pointKey } from '../utils';
 
+const MAX_DELTA = 2;
+
 export const CREATE_GRID = 'grid/CREATE_GRID';
 export const createGrid = (rows, cols) => ({
   type: CREATE_GRID,
@@ -45,7 +47,7 @@ export default function grid(state = initialState, action) {
         const nextX = (y <= 2 * x) ? x : (cols + x);
         heights = heights.set(pointKey(nextX, y), 0);
         // dont create cells for outer layer
-        if (x < cols && y < rows) {          
+        if (x < cols && y < rows) {
           cells.push({x: nextX, y});
         }
       }
@@ -64,7 +66,7 @@ export default function grid(state = initialState, action) {
   if (action.type === RAISE_POINTS) {
     const { points } = action;
     // TODO - part of action?
-    const maxDelta = 2;
+    const maxDelta = MAX_DELTA;
 
     let currentHeights = state.heights;
     let targetHeights = points.map(({x, y}) => currentHeights.get(pointKey(x, y)) + 1);
@@ -96,14 +98,14 @@ function raisePointRecursively(heights, x, y, maxDelta) {
   const updatedHeight = heights.get(pointKey(x, y)) + 1;
   heights = heights.set(pointKey(x, y), updatedHeight);
   [
-    [x - 1, y],
-    [x, y - 1],
-    [x + 1, y],
-    [x, y + 1],
+    [x - 1, y - 2],
+    [x + 0, y - 1],
+    [x + 1, y + 0],
     [x + 1, y + 1],
+    [x + 1, y + 2],
+    [x + 0, y + 1],
+    [x - 1, y + 0],
     [x - 1, y - 1],
-    [x + 1, y - 1],
-    [x - 1, y + 1],
   ].forEach(([otherX, otherY]) => {
     if (heights.get(pointKey(x, y)) === undefined) {
       return;
