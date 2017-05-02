@@ -57,7 +57,7 @@ const GroundColumn = ({heights, rows, x}) => {
 };
 
 // TODO - rename classes
-// TODO - extend ground on right side?
+// TODO - extend ground on right/left side?
 class GroundBox extends Component {
   render() {
     const { heights, rows, cols } = this.props;
@@ -68,7 +68,7 @@ class GroundBox extends Component {
             key={x}
             heights={heights}
             rows={rows}
-            x={x}
+            x={x + rows / 2}
           />
         ))}
       </g>

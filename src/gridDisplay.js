@@ -23,7 +23,6 @@ export const adjustPoint = (x, y, direction) => {
   };
 }
 
-
 export const pointScreenPosHeightless = (x, y) => pointFromHeight(0, x, y);
 
 const getHeight = (heights, x, y) => (heights.get(pointKey(x, y)) || 0);

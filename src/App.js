@@ -15,7 +15,7 @@ class App extends Component {
     return (
       <div>
         <svg height="800" width="1200">
-          <g transform="translate(600, 50) scale(0.4)">
+          <g transform="translate(150, 50) scale(0.4)">
             <g>
               <GroundBox/>
               {this.props.cells.map((cell, index) => (
