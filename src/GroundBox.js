@@ -5,12 +5,12 @@ import { GROUND_HEIGHT, getCorners, pointScreenPosHeightless } from './gridDispl
 import { pointString } from './utils';
 
 const GroundColumn = ({heights, rows, x}) => {
-  const corners = getCorners(heights, x, rows - x - 1);
+  const corners = getCorners(heights, x, rows - 1);
 
   const rightTop = corners[1];
   const leftTop = corners[3];
 
-  let middleBottom = pointScreenPosHeightless(x + 1, rows - x);
+  let middleBottom = pointScreenPosHeightless(x + 1, rows + 1);
   middleBottom.y += GROUND_HEIGHT;
 
   const middleTop = {
@@ -18,10 +18,10 @@ const GroundColumn = ({heights, rows, x}) => {
     y: Math.min(leftTop.y, rightTop.y)
   };
 
-  let leftBottom = pointScreenPosHeightless(x, rows - x);
+  let leftBottom = pointScreenPosHeightless(x, rows);
   leftBottom.y += GROUND_HEIGHT;
 
-  let rightBottom = pointScreenPosHeightless(x + 1, rows - x - 1);
+  let rightBottom = pointScreenPosHeightless(x + 1, rows);
   rightBottom.y += GROUND_HEIGHT;
 
   const points = [

@@ -42,10 +42,10 @@ export default function grid(state = initialState, action) {
     let cells = [];
     for (let x = 0; x < cols + 1; x++) {
       for (let y = 0; y < rows + 1; y++) {
-        heights = heights.set(pointKey(x, y - x), 0);
+        heights = heights.set(pointKey(x, y), 0);
         // dont create cells for outer layer
         if (x < cols && y < rows) {
-          cells.push({x, y: y - x});
+          cells.push({x, y});
         }
       }
     }

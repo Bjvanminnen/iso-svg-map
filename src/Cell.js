@@ -95,8 +95,8 @@ class Cell extends Component {
     const { selectPoint, addPoint, corners, x, y } = this.props;
     const adjusts = [
       { x: 0, y: 0 },
-      { x: 1, y: 0 },
       { x: 1, y: 1 },
+      { x: 1, y: 2 },
       { x: 0, y: 1 }
     ];
 
