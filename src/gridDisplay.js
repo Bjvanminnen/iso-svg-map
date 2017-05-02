@@ -10,10 +10,18 @@ const pointFromHeight = (height, x, y) => ({
   y: y * TILE_HEIGHT_HALF - HEIGHT_DELTA * height,
 });
 
-console.log(pointFromHeight(0, 0, 0));
-console.log(pointFromHeight(0, 1, 1));
-console.log(pointFromHeight(0, 1, 2));
-console.log(pointFromHeight(0, 0, 1));
+const adjusts = [
+  { x: 0, y: 0 },
+  { x: 1, y: 1 },
+  { x: 1, y: 2 },
+  { x: 0, y: 1 }
+];
+export const adjustPoint = (x, y, direction) => {
+  return {
+    x: x + adjusts[direction].x,
+    y: y + adjusts[direction].y
+  };
+}
 
 
 export const pointScreenPosHeightless = (x, y) => pointFromHeight(0, x, y);
@@ -25,15 +33,15 @@ export const pointScreenPos = (heights, x, y) => (
 );
 
 export const getCorners = (heights, x, y) => ([
-  pointScreenPos(heights, x, y),
-  pointScreenPos(heights, x + 1, y + 1),
-  pointScreenPos(heights, x + 1, y + 2),
-  pointScreenPos(heights, x, y + 1),
+  pointScreenPos(heights, x + adjusts[0].x, y + adjusts[0].y),
+  pointScreenPos(heights, x + adjusts[1].x, y + adjusts[1].y),
+  pointScreenPos(heights, x + adjusts[2].x, y + adjusts[2].y),
+  pointScreenPos(heights, x + adjusts[3].x, y + adjusts[3].y),
 ]);
-  
+
 export const getCornerHeights = (heights, x, y) => ([
-  getHeight(heights, x, y),
-  getHeight(heights, x + 1, y + 1),
-  getHeight(heights, x + 1, y + 2),
-  getHeight(heights, x, y + 1),
+  getHeight(heights, x + adjusts[0].x, y + adjusts[0].y),
+  getHeight(heights, x + adjusts[1].x, y + adjusts[1].y),
+  getHeight(heights, x + adjusts[2].x, y + adjusts[2].y),
+  getHeight(heights, x + adjusts[3].x, y + adjusts[3].y),
 ]);

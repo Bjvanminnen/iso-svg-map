@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getCorners, getCornerHeights } from './gridDisplay';
+import { getCorners, getCornerHeights, adjustPoint } from './gridDisplay';
 import { selectPoint, addPoint } from './redux/selectedPoints';
 import { pointString, pointKey } from './utils';
 import createCachedSelector from 're-reselect';
@@ -93,12 +93,6 @@ class Cell extends Component {
 
   onClick(event) {
     const { selectPoint, addPoint, corners, x, y } = this.props;
-    const adjusts = [
-      { x: 0, y: 0 },
-      { x: 1, y: 1 },
-      { x: 1, y: 2 },
-      { x: 0, y: 1 }
-    ];
 
     // TODO - seems like there might be some bugs in lower right quadrant cells
     // TODO - could have us select a plane rather than the entire cell?
@@ -120,15 +114,9 @@ class Cell extends Component {
           minIndex = index;
         }
       });
-      pointsToAdd.push({
-        x: x + adjusts[minIndex].x,
-        y: y + adjusts[minIndex].y
-      });
+      pointsToAdd.push(adjustPoint(x, y, minIndex));
     } else {
-      pointsToAdd = adjusts.map(adjustment => ({
-        x: x + adjustment.x,
-        y: y + adjustment.y
-      }));
+      pointsToAdd = [0,1,2,3].map(direction => adjustPoint(x, y, direction));
     }
 
     pointsToAdd.forEach(({x, y}, index) => {
