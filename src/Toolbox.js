@@ -8,6 +8,10 @@ const styles = {
     position: 'absolute',
     left: 10,
     top: 10
+  },
+  pre: {
+    border: '1px solid black',
+    backgroundColor: 'lavender'
   }
 };
 
@@ -30,7 +34,7 @@ class Toolbox extends Component {
   }
 
   render() {
-    const { selectedPoints } = this.props;
+    const { selectedPoints, debugInfo } = this.props;
     return (
       <div style={styles.main}>
         <div>
@@ -64,13 +68,17 @@ class Toolbox extends Component {
           </button>
         </div>
         */}
+        <pre style={styles.pre}>
+          {debugInfo}
+        </pre>
       </div>
     );
   }
 }
 
 export default connect(state => ({
-  selectedPoints: state.selectedPoints
+  selectedPoints: state.selectedPoints,
+  debugInfo: state.debugInfo.text
 }), {
   raisePoints,
   clearSelection,

@@ -4,6 +4,7 @@ import Immutable from 'immutable';
 
 import grid, { CREATE_GRID } from './grid';
 import selectedPoints from './selectedPoints';
+import debugInfo, { SET_DEBUG_TEXT} from './debugInfo';
 
 let store;
 
@@ -22,11 +23,13 @@ export default function getStore() {
       combineReducers({
         grid,
         selectedPoints,
+        debugInfo,
       }),
       applyMiddleware(
         saveLocalStorage,
         createLogger({
           collapsed: true,
+          predicate: (getState, action) => action.type !== SET_DEBUG_TEXT,
           stateTransformer: (state) => {
             let newState = {};
 
