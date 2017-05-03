@@ -13,7 +13,7 @@ try {
   const state = JSON.parse(savedStore);
   store.dispatch(hydrate(state));
 } catch (err) {
-  store.dispatch(createGrid(20, 15));
+  store.dispatch(createGrid(40, 40));
 }
 
 // TODO

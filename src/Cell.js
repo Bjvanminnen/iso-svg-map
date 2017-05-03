@@ -21,7 +21,9 @@ const colors = {
 
 const heightsKey = (heights) => {
   const min = Math.min(...heights);
-  return heights.map(x => x === min ? '0' : '1').join('');
+  const max = Math.max(...heights);
+  return heights.map(x => x === min ? '0' : (
+    x === max ? '2' : '1')).join('');
 };
 
 const allPoints = [0,1,2,3];
@@ -47,20 +49,21 @@ const leftRight = [leftPoints, rightPoints];
 
 const polygons = {
   '0000': genPoly(all, [colors.flat]),
-  '0001': genPoly(leftRight, [colors.angleEast, colors.flat]),
-  '0101': genPoly(leftRight, [colors.angleEast, colors.angleWest]),
-  '0010': genPoly(topBottom, [colors.flat, colors.angleSouthEast]),
-  '0011': genPoly(all, [colors.angleNorthEast]),
-  '0100': genPoly(leftRight, [colors.flat, colors.angleWest]),
-  '0110': genPoly(all, [colors.angleNorthWest]),
-  '0111': genPoly(topBottom, [colors.angleSouthWest, colors.flat]),
-  '1000': genPoly(topBottom, [colors.angleSouth, colors.flat]),
-  '1001': genPoly(all, [colors.angleSouthEast]),
-  '1010': genPoly(topBottom, [colors.angleSouth, colors.angleNorth]),
-  '1011': genPoly(leftRight, [colors.flat, colors.angleSouthEast]),
-  '1100': genPoly(all, [colors.angleSouthWest]),
-  '1101': genPoly(topBottom, [colors.flat, colors.angleSouth]),
-  '1110': genPoly(leftRight, [colors.angleSouthWest, colors.flat])
+  '0002': genPoly(leftRight, [colors.angleEast, colors.flat]),
+  '0202': genPoly(leftRight, [colors.angleEast, colors.angleWest]),
+  '0020': genPoly(topBottom, [colors.flat, colors.angleSouthEast]),
+  '0022': genPoly(all, [colors.angleNorthEast]),
+  '0200': genPoly(leftRight, [colors.flat, colors.angleWest]),
+  '0220': genPoly(all, [colors.angleNorthWest]),
+  '0222': genPoly(topBottom, [colors.angleSouthWest, colors.flat]),
+  '2000': genPoly(topBottom, [colors.angleSouth, colors.flat]),
+  '2002': genPoly(all, [colors.angleSouthEast]),
+  '2020': genPoly(topBottom, [colors.angleSouth, colors.angleNorth]),
+  '2022': genPoly(leftRight, [colors.flat, colors.angleSouthEast]),
+  '2101': genPoly(all, [colors.angleSouth]),
+  '2200': genPoly(all, [colors.angleSouthWest]),
+  '2202': genPoly(topBottom, [colors.flat, colors.angleSouth]),
+  '2220': genPoly(leftRight, [colors.angleSouthWest, colors.flat])
 };
 
 /**
@@ -130,6 +133,11 @@ class Cell extends Component {
 
   render() {
     const { corners, cornerHeights } = this.props;
+
+    // TODO - heights like 4202 are wrong
+    if (this.props.x === 12 && this.props.y === 16) {
+      console.log(cornerHeights);
+    }
 
     const key = heightsKey(cornerHeights);
 

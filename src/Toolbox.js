@@ -55,6 +55,7 @@ class Toolbox extends Component {
             Clear Selection
           </button>
         </div>
+        {/*
         <div>
           <button
             onClick={this.props.scaleHeights.bind(this, 2)}
@@ -62,6 +63,7 @@ class Toolbox extends Component {
             Double
           </button>
         </div>
+        */}
       </div>
     );
   }
