@@ -48,27 +48,57 @@ const all = [allPoints];
 const topBottom = [topPoints, bottomPoints];
 const leftRight = [leftPoints, rightPoints];
 
+// NOTE: Those with mix of 2s and 1s might not have the exact right direction
 const polygons = {
   '0000': genPoly(all, [colors.flat]),
-  '0012': genPoly(all, [colors.northEast]),
   '0002': genPoly(leftRight, [colors.east, colors.flat]),
+  '0012': genPoly(all, [colors.northEast]),
+  '0020': genPoly(topBottom, [colors.flat, colors.southEast]),
+  '0021': genPoly(all, [colors.north]),
+  '0022': genPoly(all, [colors.northEast]),
+  '0102': genPoly(leftRight, [colors.northEast, colors.northWest]),
+  '0112': genPoly(leftRight, [colors.northEast, colors.northWest]),
+  '0120': genPoly(all, [colors.northWest]),
+  '0121': genPoly(all, [colors.north]),
   '0122': genPoly(all, [colors.northEast]),
+  '0200': genPoly(leftRight, [colors.flat, colors.west]),
   '0201': genPoly(leftRight, [colors.east, colors.west]),
   '0202': genPoly(leftRight, [colors.east, colors.west]),
-  '0020': genPoly(topBottom, [colors.flat, colors.southEast]),
-  '0022': genPoly(all, [colors.northEast]),
-  '0200': genPoly(leftRight, [colors.flat, colors.west]),
+  '0210': genPoly(all, [colors.northWest]),
+  '0211': genPoly(leftRight, [colors.east, colors.west]),
+  '0212': genPoly(leftRight, [colors.east, colors.west]),
   '0220': genPoly(all, [colors.northWest]),
-  '0222': genPoly(topBottom, [colors.southWest, colors.flat]),
+  '0221': genPoly(all, [colors.northWest]),
+  '0222': genPoly(topBottom, [colors.north, colors.flat]),
+  '1002': genPoly(all, [colors.southEast]),
+  '1012': genPoly(all, [colors.southEast]),
+  '1020': genPoly(leftRight, [colors.northWest, colors.northEast]),
+  '1021': genPoly(all, [colors.northEast]),
+  '1022': genPoly(all, [colors.northEast]),
+  '1102': genPoly(all, [colors.southEast]),
+  '1120': genPoly(leftRight, [colors.northWest, colors.northEast]),
+  '1200': genPoly(all, [colors.southWest]),
+  '1201': genPoly(leftRight, [colors.east, colors.west]),
+  '1210': genPoly(all, [colors.northWest]),
+  '1220': genPoly(all, [colors.northWest]),
   '2000': genPoly(topBottom, [colors.south, colors.flat]),
+  '2001': genPoly(all, [colors.southEast]),
   '2002': genPoly(all, [colors.southEast]),
   '2010': genPoly(topBottom, [colors.south, colors.north]),
+  '2011': genPoly(topBottom, [colors.south, colors.southEast]),
+  '2012': genPoly(all, [colors.southEast]),
   '2020': genPoly(topBottom, [colors.south, colors.north]),
+  '2021': genPoly(topBottom, [colors.north, colors.south]),
   '2022': genPoly(leftRight, [colors.flat, colors.southEast]),
+  '2100': genPoly(all, [colors.southWest]),
   '2101': genPoly(all, [colors.south]),
+  '2102': genPoly(all, [colors.southEast]),
   '2110': genPoly(leftRight, [colors.southWest, colors.southEast]),
+  '2120': genPoly(topBottom, [colors.south, colors.north]),
   '2200': genPoly(all, [colors.southWest]),
+  '2201': genPoly(all, [colors.southWest]),
   '2202': genPoly(topBottom, [colors.flat, colors.south]),
+  '2210': genPoly(all, [colors.southWest]),
   '2220': genPoly(leftRight, [colors.southWest, colors.flat]),
   default: genPoly(all, ['yellow']),
 };
@@ -104,10 +134,13 @@ class Cell extends Component {
   onMouseOver() {
     const { cornerHeights, x, y, setDebugObj } = this.props;
 
+    const key = heightsKey(cornerHeights);
+
     setDebugObj({
       x,
       y,
-      heights: cornerHeights
+      heights: cornerHeights,
+      k: key,
     });
   }
 
