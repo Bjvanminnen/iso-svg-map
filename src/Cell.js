@@ -79,6 +79,7 @@ const polygons = {
   '1120': genPoly(leftRight, [colors.northWest, colors.northEast]),
   '1200': genPoly(all, [colors.southWest]),
   '1201': genPoly(leftRight, [colors.east, colors.west]),
+  '1202': genPoly(leftRight, [colors.east, colors.west]),
   '1210': genPoly(all, [colors.northWest]),
   '1220': genPoly(all, [colors.northWest]),
   '2000': genPoly(topBottom, [colors.south, colors.flat]),
@@ -187,6 +188,9 @@ class Cell extends Component {
     const key = heightsKey(cornerHeights);
 
     let polies = polygons[key] || polygons.default;
+    if (polies === polygons.default) {
+      window.stopRaising =true;
+    }
 
     return (
       <g>

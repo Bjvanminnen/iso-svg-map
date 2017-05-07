@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import { raisePoints, scaleHeights } from './redux/grid';
 import { clearSelection } from './redux/selectedPoints';
 
@@ -21,6 +22,20 @@ class Toolbox extends Component {
 
     this.onRaise = this.onRaise.bind(this);
     this.onClear = this.onClear.bind(this);
+    this.raiseRandom = this.raiseRandom.bind(this);
+  }
+
+  raiseRandom() {
+    const { cells, raisePoints } = this.props;
+    window.stopRaising = false;
+    const interval = setInterval(() => {
+      if (window.stopRaising) {
+        clearInterval(interval);
+        return;
+      }
+      const cell = _.sample(cells);
+      raisePoints([cell]);
+    }, 50);
   }
 
   onRaise() {
@@ -59,15 +74,13 @@ class Toolbox extends Component {
             Clear Selection
           </button>
         </div>
-        {/*
         <div>
           <button
-            onClick={this.props.scaleHeights.bind(this, 2)}
+            onClick={this.raiseRandom}
           >
-            Double
+            RaiseRandom
           </button>
         </div>
-        */}
         <pre style={styles.pre}>
           {debugInfo}
         </pre>
@@ -77,6 +90,7 @@ class Toolbox extends Component {
 }
 
 export default connect(state => ({
+  cells: state.grid.cells,
   selectedPoints: state.selectedPoints,
   debugInfo: state.debugInfo.text
 }), {
