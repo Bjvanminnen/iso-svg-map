@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import { raisePoints, scaleHeights } from './redux/grid';
 import { clearSelection } from './redux/selectedPoints';
+import { undo } from './redux/combineReducersUndoable';
 
 const styles = {
   main: {
@@ -81,6 +82,13 @@ class Toolbox extends Component {
             RaiseRandom
           </button>
         </div>
+        <div>
+          <button
+            onClick={this.props.undo}
+          >
+            Undo
+          </button>
+        </div>
         <pre style={styles.pre}>
           {debugInfo}
         </pre>
@@ -96,5 +104,6 @@ export default connect(state => ({
 }), {
   raisePoints,
   clearSelection,
-  scaleHeights
+  scaleHeights,
+  undo
 })(Toolbox);

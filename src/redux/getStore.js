@@ -1,6 +1,7 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import { createLogger } from 'redux-logger';
 import Immutable from 'immutable';
+import combineReducersUndoable from './combineReducersUndoable';
 
 import grid, { CREATE_GRID } from './grid';
 import selectedPoints from './selectedPoints';
@@ -20,7 +21,7 @@ const saveLocalStorage = store => next => action => {
 export default function getStore() {
   if (!store) {
     store = createStore(
-      combineReducers({
+      combineReducersUndoable({
         grid,
         selectedPoints,
         debugInfo,
