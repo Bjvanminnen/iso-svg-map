@@ -6,6 +6,7 @@ import combineReducersUndoable from './combineReducersUndoable';
 import grid, { CREATE_GRID } from './grid';
 import selectedPoints from './selectedPoints';
 import debugInfo, { SET_DEBUG_TEXT} from './debugInfo';
+import colors from './colors';
 
 let store;
 
@@ -24,6 +25,7 @@ export default function getStore() {
       combineReducersUndoable({
         grid,
         selectedPoints,
+        colors,
         debugInfo,
       }),
       applyMiddleware(

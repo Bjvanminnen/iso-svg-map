@@ -7,18 +7,32 @@ import { setDebugObj } from './redux/debugInfo';
 import { pointString, pointKey } from './utils';
 import createCachedSelector from 're-reselect';
 
+// const colors = {
+//   flat: '#98BC60',
+//   north: 'east',
+//   northEast: 'east',
+//   east: 'east',
+//   southEast: 'east',
+//   south: 'west',
+//   southWest: 'west',
+//   west: 'west',
+//   northWest: 'west',
+//   stroke: '#99b74f'
+// };
+
 const colors = {
-  flat: '#98BC60',
-  north: '#B5DA7A',
-  northEast: '#B5DA7A',
-  east: '#B5DA7A',
-  southEast: '#B5DA7A',
-  south: '#79A337',
-  southWest: '#79A337',
-  west: '#79A337',
-  northWest: '#79A337',
-  stroke: '#99b74f'
+  flat: 'flat',
+  north: 'east',
+  northEast: 'east',
+  east: 'east',
+  southEast: 'east',
+  south: 'west',
+  southWest: 'west',
+  west: 'west',
+  northWest: 'west',
+  stroke: 'stroke'
 };
+
 
 const heightsKey = (heights) => {
   const min = Math.min(...heights);
@@ -199,8 +213,8 @@ class Cell extends Component {
             key={key}
             points={pointString(poly.points.map(index => corners[index]))}
             style={{
-              stroke: '#c6e398',
-              fill: poly.color
+              stroke: this.props.colors.minorStroke,
+              fill: this.props.colors[poly.color]
             }}
             onClick={this.onClick}
             onMouseOver={this.onMouseOver}
@@ -210,7 +224,7 @@ class Cell extends Component {
           key={-1}
           points={pointString(corners)}
           style={{
-            stroke: colors.stroke,
+            stroke: this.props.colors.stroke,
             fill: 'none'
           }}
           onClick={this.onClick}
@@ -241,7 +255,8 @@ const getCornerHeightsSelector = createCachedSelector(
 
 export default connect((state, otherProps) => ({
   corners: getCornerSelector(state, otherProps),
-  cornerHeights: getCornerHeightsSelector(state, otherProps)
+  cornerHeights: getCornerHeightsSelector(state, otherProps),
+  colors: state.colors
 }), ({
   selectPoint, addPoint, setDebugObj
 }))(Cell);
