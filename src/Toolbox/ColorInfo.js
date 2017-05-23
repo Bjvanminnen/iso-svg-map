@@ -7,7 +7,7 @@ const styles = {
   }
 };
 
-export default class DebugInfo extends Component {
+export default class ColorInfo extends Component {
   constructor(props) {
     super(props);
 
@@ -26,9 +26,11 @@ export default class DebugInfo extends Component {
 
   render() {
     const { data } = this.props;
+    const contents = this.state.collapsed ? 'ColorInfo...' : data;
+    // TODO - make editable
     return (
       <pre style={styles.pre} onClick={this.toggleCollapsed}>
-        {this.state.collapsed ? 'DebugInfo...' : data}
+        {JSON.stringify(contents, null, 2)}
       </pre>
     );
   }

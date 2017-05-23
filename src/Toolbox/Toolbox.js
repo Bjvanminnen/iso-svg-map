@@ -5,6 +5,7 @@ import { raisePoints, scaleHeights } from '../redux/grid';
 import { clearSelection } from '../redux/selectedPoints';
 import { undo } from '../redux/combineReducersUndoable';
 import DebugInfo from './DebugInfo';
+import ColorInfo from './ColorInfo';
 
 const styles = {
   main: {
@@ -47,7 +48,7 @@ class Toolbox extends Component {
   }
 
   render() {
-    const { selectedPoints, debugInfo } = this.props;
+    const { selectedPoints } = this.props;
     return (
       <div style={styles.main}>
         <div>
@@ -87,6 +88,7 @@ class Toolbox extends Component {
           </button>
         </div>
         <DebugInfo data={this.props.debugInfo}/>
+        <ColorInfo data={this.props.colorInfo}/>
       </div>
     );
   }
@@ -95,7 +97,8 @@ class Toolbox extends Component {
 export default connect(state => ({
   cells: state.grid.cells,
   selectedPoints: state.selectedPoints,
-  debugInfo: state.debugInfo.text
+  debugInfo: state.debugInfo.text,
+  colorInfo: state.colors
 }), {
   raisePoints,
   clearSelection,
