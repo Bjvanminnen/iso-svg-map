@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { raisePoints, scaleHeights } from './redux/grid';
-import { clearSelection } from './redux/selectedPoints';
-import { undo } from './redux/combineReducersUndoable';
+import { raisePoints, scaleHeights } from '../redux/grid';
+import { clearSelection } from '../redux/selectedPoints';
+import { undo } from '../redux/combineReducersUndoable';
+import DebugInfo from './DebugInfo';
 
 const styles = {
   main: {
     position: 'absolute',
     left: 10,
     top: 10
-  },
-  pre: {
-    border: '1px solid black',
-    backgroundColor: 'lavender'
-  }
+  }  
 };
 
 class Toolbox extends Component {
@@ -89,9 +86,7 @@ class Toolbox extends Component {
             Undo
           </button>
         </div>
-        <pre style={styles.pre}>
-          {debugInfo}
-        </pre>
+        <DebugInfo data={this.props.debugInfo}/>
       </div>
     );
   }

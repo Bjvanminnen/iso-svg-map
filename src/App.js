@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import GroundBox from './GroundBox';
 import Cell from './Cell';
 import SelectedPoints from './SelectedPoints';
-import Toolbox from './Toolbox';
+import Toolbox from './Toolbox/Toolbox';
 
 class App extends Component {
   static propTypes = {
